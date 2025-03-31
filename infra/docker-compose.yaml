@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_DATABASE: contratos
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin123
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  backend:
+    build: ../backend
+    container_name: backend
+    ports:
+      - "3001:3001"
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin123
+      - MYSQL_DATABASE=contratos
+      - JWT_SECRET=supersecreto
+    depends_on:
+      - mysql
+
+  frontend:
+    build: ../frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+
+volumes:
+  mysql_data:
