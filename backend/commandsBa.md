@@ -1,6 +1,10 @@
  # instalacion de NestJS
     - nest new backend
-    - pnpm run start:dev
+    - npm run start:dev
+
+# instalaciones
+    npm install class-validator class-transformer
+
 
  # comando para lanzar el dockerfile 
   

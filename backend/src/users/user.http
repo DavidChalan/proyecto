@@ -1,0 +1,13 @@
+### Ejemplo de Login
+POST http://144.91.101.221:3001/user
+Content-Type: application/json
+
+{
+  "username": "david",
+  "email": "ld@correo.com",
+  "password": "444"
+}
+
+### Obtener usuarios protegidos
+# GET https://api.ejemplo.com/usuarios
+# Authorization: Bearer TU_TOKEN_AQUI
