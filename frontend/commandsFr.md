@@ -3,3 +3,5 @@
     - pnpm run dev
 # isntalar boostrap
     - npm install bootstrap
+    - npm install @fortawesome/fontawesome-free
+ 

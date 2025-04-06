@@ -5,10 +5,10 @@ services:
     image: mysql:8
     container_name: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: admin123
-      MYSQL_DATABASE: contratos
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin123
+      MYSQL_ROOT_PASSWORD: 686905439
+      MYSQL_DATABASE: proyecto
+      MYSQL_USER: david
+      MYSQL_PASSWORD: 686905439
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
@@ -18,14 +18,14 @@ services:
     build: ../backend
     container_name: backend
     ports:
-      - "3001:3001"
+      - "3001:3000"
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_PORT=3306
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=admin123
-      - MYSQL_DATABASE=contratos
-      - JWT_SECRET=supersecreto
+      - MYSQL_USER=david
+      - MYSQL_PASSWORD=686905439
+      - MYSQL_DATABASE=proyecto
+      - JWT_SECRET=686905439
     depends_on:
       - mysql
 
