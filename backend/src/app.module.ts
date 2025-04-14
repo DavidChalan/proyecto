@@ -5,9 +5,13 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ContractsModule } from './contracts/contracts.module';
+import { ContractUpdateModule } from './contract-update/contract-update.module';
+import { TemplatesModule } from './templates/templates.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), // habilita variables de entorno
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }), // habilita variables de entorno
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -17,7 +21,12 @@ import { AuthModule } from './auth/auth.module';
       database: process.env.DB_NAME,
       synchronize: true,
       autoLoadEntities: true,
-    }), UsersModule, AuthModule,
+    }),
+    UsersModule,
+    AuthModule,
+    ContractsModule,
+    ContractUpdateModule,
+    TemplatesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
