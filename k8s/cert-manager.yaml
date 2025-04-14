@@ -19,24 +19,6 @@ spec:
   targetNamespace: cert-manager
   version: v1.14.3
   set:
-    installCRDs: true
-
----
-
-# ClusterIssuer para Let's Encrypt (producción)
-apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
-metadata:
-  name: letsencrypt-prod
-spec:
-  acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
-    email: davidchalan@tucorreo.com
-    privateKeySecretRef:
-      name: letsencrypt-prod
-    solvers:
-      - http01:
-          ingress:
-            class: nginx
+    installCRDs: "true"
 
 ---

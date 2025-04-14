@@ -28,11 +28,11 @@ spec:
             - name: MYSQL_USER
               value: david
             - name: MYSQL_PASSWORD
-              value: 686905439
+              value: "686905439"
             - name: MYSQL_DATABASE
               value: proyecto
             - name: JWT_SECRET
-              value: 686905439
+              value: "686905439"
 
 ---
 
