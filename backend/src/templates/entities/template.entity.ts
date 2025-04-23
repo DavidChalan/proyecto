@@ -1,1 +1,6 @@
-export class Template {}
+export class Template {
+    @PrimaryGeneratedColumn()
+    id: number;
+    @column()
+    
+}
