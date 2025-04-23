@@ -1,37 +1,49 @@
-// auth/auth.service.ts
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { UsersService } from 'src/users/users.service';
+import { registerDto } from './dto/register.dto';
+import * as bcryptjs from 'bcryptjs';
+import { loginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
   ) {}
-
-  async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.usersService.findbyEmail(email);
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const { password, ...result } = user;
-      return result;
+  async register({ name, email, password }: registerDto) {
+    const user = await this.usersService.findbyEmail(email); //verificamos que el usuario exista
+    if (user) {
+      throw new BadRequestException('User alresy exists');
     }
-    return null;
-  }
-
-  async login(user: any) {
-    const payload = { email: user.email, sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  }
-
-  async register(userData: { email: string; password: string }) {
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
-    return this.usersService.create({
-      ...userData,
-      password: hashedPassword,
+    return await this.usersService.create({
+      name,
+      email,
+      password: await bcryptjs.hash(password, 10), //hashear contraseña
     });
+  }
+  async login({ email, password }: loginDto) {
+    const user = await this.usersService.findbyEmail(email);
+    if (!user) {
+      throw new UnauthorizedException('email is wrong'); //verificamos el email
+    }
+
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('password is wrong'); //verificamos la contraseña
+    }
+
+    return {
+      message: 'Login successful',
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    };
   }
 }

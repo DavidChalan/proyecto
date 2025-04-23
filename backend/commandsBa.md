@@ -29,6 +29,8 @@ npm install -D eslint-plugin-import eslint-plugin-react eslint-plugin-react-hook
 
     - npm install @nestjs/jwt @nestjs/passport passport passport-jwt bcrypt
     - pnpm install --save-dev @types/bcrypt
-#  Corregir
-    npx prettier --write .
 
+# Corregir
+
+    npx prettier --write .
+    npx prettier --write .\src\users\dto\authentificated-user.dto.ts
