@@ -19,8 +19,8 @@ export class User {
   @Column()
   password: string;
 
-  // @Column({ default: 'user' })
-  // rol: string;
+  @Column({ default: 'user' })
+  role: string;
 
   @DeleteDateColumn() //este sirve por si eliminamos un usuario no se eliminia de la base de datos para tener un registro
   deletedAT: Date;

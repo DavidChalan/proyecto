@@ -24,7 +24,8 @@ npm install -D eslint-plugin-import eslint-plugin-react eslint-plugin-react-hook
 # crear carpeta con todo dentro
 
     - nest g resource users --no-spec
-
+    - nest g guard .\auth\guard\roles --flat --no-spec
+ 
 # JWT
 
     - npm install @nestjs/jwt @nestjs/passport passport passport-jwt bcrypt
@@ -34,3 +35,4 @@ npm install -D eslint-plugin-import eslint-plugin-react eslint-plugin-react-hook
 
     npx prettier --write .
     npx prettier --write .\src\users\dto\authentificated-user.dto.ts
+    

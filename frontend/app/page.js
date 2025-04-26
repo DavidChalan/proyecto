@@ -19,7 +19,7 @@ export default function LoginPage() {
                 <div className="input-group-prepend">
                   <span className="input-group-text"><i className="fas fa-user"></i></span>
                 </div>
-                <input type="text" className="form-control" placeholder="username" />
+                <input type="text" className="form-control" placeholder="Email" />
               </div>
               <div className="input-group form-group">
                 <div className="input-group-prepend">
