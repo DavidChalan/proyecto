@@ -1,5 +1,12 @@
 import { Transform } from 'class-transformer';
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import { Role } from 'src/common/enums/rol.enum';
 export class registerDto {
   @Transform(({ value }: { value: string }) => value.trim())
   @IsString()
@@ -12,4 +19,8 @@ export class registerDto {
   @IsString()
   @MinLength(6)
   password: string;
+
+  @IsOptional()
+  @IsEnum(Role)
+  role?: Role;
 }

@@ -24,7 +24,7 @@ export interface AuthenticatedRequest extends Request {
 
 @Injectable()
 //Este guard se usa para proteger rutas y verificar el token JWT
-export class AuthGuard implements CanActivate {
+export class JwtAuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService, // Servicio para verificar el token
     private readonly config: ConfigService, // Acceso a variables de entorno (como JWT_SECRET)
