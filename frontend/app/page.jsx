@@ -1,14 +1,50 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const [user, setUser] = useState(null);
-  const [password, setPassword] = useState ('');
-  const [Email, setEmail] = useState('');
-useEffect(() => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
   
-})
+  console.log('PRUEBA_ENV:', process.env.NEXT_PUBLIC_API_URL);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Verifica que los campos no estén vacíos
+    if (!email || !password) {
+      alert('Email y contraseña son requeridos');
+      return;
+    }
+
+    try {
+      console.log('URL usada para fetch:', `${process.env.NEXT_PUBLIC_API_URL}/auth/login`);
+      console.log('Valor real de la variable:', process.env.NEXT_PUBLIC_API_URL);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Error en la autenticación');
+      }
+
+      const data = await res.json();
+      console.log("Login exitoso:", data);
+      // Guarda el token o redirige al usuario
+      // Redirigir al usuario
+      router.push("/generarcontratos");
+
+    } catch (error) {
+      console.error("Error completo:", error);
+      alert(error.message || 'Error al conectar con el servidor');
+    }
+  };
 
   return (
     <div className="container">
@@ -29,7 +65,7 @@ useEffect(() => {
             </div>
           </div>
           <div className="card-body">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="input-group form-group">
                 <div className="input-group-prepend">
                   <span className="input-group-text">
@@ -40,7 +76,11 @@ useEffect(() => {
                   type="text"
                   className="form-control"
                   placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
+
               </div>
               <div className="input-group form-group">
                 <div className="input-group-prepend">
@@ -51,7 +91,10 @@ useEffect(() => {
                 <input
                   type="password"
                   className="form-control"
-                  placeholder="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
               </div>
               <div className="row align-items-center remember">
@@ -79,3 +122,4 @@ useEffect(() => {
     </div>
   );
 }
+

@@ -8,6 +8,7 @@ import { registerDto } from './dto/register.dto';
 import * as bcryptjs from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from '../common/enums/rol.enum';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
-  async register({ name, email, password }: registerDto) {
+  async register({ name, email, password, role }: registerDto) {
     const user = await this.usersService.findbyEmail(email); //verificamos que el usuario exista
     if (user) {
       throw new BadRequestException('User alresy exists');
@@ -24,14 +25,16 @@ export class AuthService {
       name,
       email,
       password: await bcryptjs.hash(password, 10), //hashear contraseña
+      role: role ?? Role.USER,
     });
     return {
       name,
       email,
+      role: role ?? Role.USER,
     };
   }
   async login({ email, password }: LoginDto) {
-    const user = await this.usersService.findIOneEmailPassword(email);
+    const user = await this.usersService.findByEmailWithPassword(email);
     if (!user) {
       throw new UnauthorizedException('email is wrong'); //verificamos el email
     }

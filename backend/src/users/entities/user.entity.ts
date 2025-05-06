@@ -1,4 +1,5 @@
 // users/user.entity.ts
+import { Role } from '../../common/enums/rol.enum';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -16,10 +17,10 @@ export class User {
   @Column({ unique: true, nullable: false }) //nullable --> no puede estar vacio
   email: string;
 
-  @Column()
+  @Column({ unique: true, select: false })
   password: string;
 
-  @Column({ default: 'user' })
+  @Column({ type: 'enum', enum: Role, default: Role.USER })
   role: string;
 
   @DeleteDateColumn() //este sirve por si eliminamos un usuario no se eliminia de la base de datos para tener un registro

@@ -18,9 +18,25 @@ export class UsersService {
       where: { email },
     });
   }
+
+  findByEmailWithPassword(email: string) {
+    return this.userRepository.findOne({
+      where: { email },
+      select: ['id', 'name', 'email', 'password', 'role'],
+    });
+  }
   //crear usuario
   create(createuserDto: CreateUserDto) {
     return this.userRepository.save(createuserDto);
+  }
+
+  findAll() {
+    return this.userRepository.find();
+  }
+
+  async remove(id: number) {
+    await this.userRepository.softDelete(id);
+    return { message: `Usuario con ID ${id} marcado como eliminado` };
   }
   //buscar usuario por email
   // findOneByEmail(email: string) {
