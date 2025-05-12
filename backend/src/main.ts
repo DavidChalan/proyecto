@@ -9,8 +9,8 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:3000',
-      // 'http://144.91.101.221:3000',
-      'http://192.168.5.6:3000',
+      'http://144.91.101.221:3000',
+      // 'http://192.168.5.6:3000',
     ], // ip fronted
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -32,7 +32,7 @@ async function bootstrap() {
 
   // 4. Puerto configurable
   const port = process.env.PORT || 3001;
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
   console.log(`🚀 Servidor corriendo en http://localhost:${port}/api/v1`);
 }
 bootstrap();

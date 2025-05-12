@@ -7,7 +7,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  
+
   console.log('PRUEBA_ENV:', process.env.NEXT_PUBLIC_API_URL);
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,6 +21,7 @@ export default function LoginPage() {
     try {
       console.log('URL usada para fetch:', `${process.env.NEXT_PUBLIC_API_URL}/auth/login`);
       console.log('Valor real de la variable:', process.env.NEXT_PUBLIC_API_URL);
+    
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         method: "POST",
         headers: {
@@ -28,23 +29,46 @@ export default function LoginPage() {
         },
         body: JSON.stringify({ email, password }),
       });
-
+    
+      const contentType = res.headers.get('content-type');
+    
       if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Error en la autenticación');
+        const errorText = await res.text(); // capturamos el texto aunque no sea JSON
+        console.error('Error:', res.status, res.statusText);
+        console.error('Contenido recibido:', errorText);
+        throw new Error(`Error del servidor: ${res.status}`);
       }
-
+    
+      if (!contentType || !contentType.includes('application/json')) {
+        const raw = await res.text();
+        throw new Error('La respuesta no es JSON:\n' + raw);
+      }
+    
       const data = await res.json();
       console.log("Login exitoso:", data);
-      // Guarda el token o redirige al usuario
-      // Redirigir al usuario
+    
+      // Puedes guardar el token si está presente
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+      }
+    
       router.push("/generarcontratos");
-
+    
     } catch (error) {
       console.error("Error completo:", error);
       alert(error.message || 'Error al conectar con el servidor');
     }
-  };
+  }
+  // // Verifica si el usuario ya está autenticado
+  // const token = localStorage.getItem('token');
+  // if (token) {
+  //   // Redirige al usuario a la página de inicio o a otra página protegida
+  //   router.push("/generarcontratos");
+  // }
+  // // Si no está autenticado, muestra el formulario de inicio de sesión
+  // // y permite que el usuario inicie sesión
+
+
 
   return (
     <div className="container">
