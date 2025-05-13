@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  console.log('PRUEBA_ENV:', process.env.NEXT_PUBLIC_API_URL);
+  // console.log('PRUEBA_ENV:', process.env.NEXT_PUBLIC_API_URL);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -19,8 +19,8 @@ export default function LoginPage() {
     }
 
     try {
-      console.log('URL usada para fetch:', `${process.env.NEXT_PUBLIC_API_URL}/auth/login`);
-      console.log('Valor real de la variable:', process.env.NEXT_PUBLIC_API_URL);
+      // console.log('URL usada para fetch:', `${process.env.NEXT_PUBLIC_API_URL}/auth/login`);
+      // console.log('Valor real de la variable:', process.env.NEXT_PUBLIC_API_URL);
     
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         method: "POST",
@@ -28,14 +28,15 @@ export default function LoginPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
+        credentials: "include", // 🔐 esto permite que se guarde la cookie
       });
     
       const contentType = res.headers.get('content-type');
     
       if (!res.ok) {
         const errorText = await res.text(); // capturamos el texto aunque no sea JSON
-        console.error('Error:', res.status, res.statusText);
-        console.error('Contenido recibido:', errorText);
+        // console.error('Error:', res.status, res.statusText);
+        // console.error('Contenido recibido:', errorText);
         throw new Error(`Error del servidor: ${res.status}`);
       }
     
@@ -128,7 +129,8 @@ export default function LoginPage() {
                 <input
                   type="submit"
                   value="Login"
-                  className="btn float-right login_btn"
+                  className="btn btn-warning float-right text-dark margin-top-2"
+                  style={{ marginTop: "10px" }}
                 />
               </div>
             </form>

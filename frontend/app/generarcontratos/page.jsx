@@ -1,6 +1,7 @@
 'use client';
 import Head from "next/head";
 import ChatTemplate from "../components/ChatTemplate";
+import LogoutButton from "../components/LogoutButton";
 import { useState } from "react";
 
 export default function GenerarContratos() {
@@ -28,6 +29,8 @@ export default function GenerarContratos() {
       }
       return;
     }
+
+    
 
     // 🏡 FLUJO CASA
     if (tipoContrato === "casa") {
@@ -138,10 +141,14 @@ export default function GenerarContratos() {
     <>
       <Head>
         <title>Chat Contratos</title>
+
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" />
       </Head>
       <main style={{ height: "100vh" }}>
+         <div>
+          <LogoutButton />
+        </div>
         <ChatTemplate messages={messages} onSend={handleSend} />
       </main>
     </>

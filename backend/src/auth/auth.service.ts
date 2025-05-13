@@ -17,7 +17,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
   async register({ name, email, password, role }: registerDto) {
-    const user = await this.usersService.findbyEmail(email); //verificamos que el usuario exista
+    const user = await this.usersService.findByEmailWithPassword(email); //verificamos que el usuario exista
+    console.log('USER:', user); // <-- agrega esto
     if (user) {
       throw new BadRequestException('User alresy exists');
     }
