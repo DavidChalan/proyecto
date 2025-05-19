@@ -35,4 +35,9 @@ npm install -D eslint-plugin-import eslint-plugin-react eslint-plugin-react-hook
 
     npx prettier --write .
     npx prettier --write .\src\users\dto\authentificated-user.dto.ts
-    
+
+
+
+# DOCUMENTACION 
+auto scroll con jsx
+https://medium.com/swlh/auto-scroll-in-javascript-283bdf76dc01

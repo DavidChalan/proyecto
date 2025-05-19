@@ -2,7 +2,9 @@
 import Head from "next/head";
 import ChatTemplate from "../components/ChatTemplate";
 import LogoutButton from "../components/LogoutButton";
+import FilesPanelPDF from "../components/FilesPanelPDF";
 import { useState } from "react";
+import "../generarcontratos/page.css";
 
 export default function GenerarContratos() {
   const [messages, setMessages] = useState([]);
@@ -30,7 +32,7 @@ export default function GenerarContratos() {
       return;
     }
 
-    
+
 
     // 🏡 FLUJO CASA
     if (tipoContrato === "casa") {
@@ -80,7 +82,7 @@ export default function GenerarContratos() {
     // 🚘 FLUJO COCHE
     if (tipoContrato === "coche") {
       const newForm = { ...form };
-    
+
       switch (step) {
         case 10:
           newForm.ClaseContrato = "coche"; // 👈 Esto indica a Make el tipo de contrato
@@ -89,7 +91,7 @@ export default function GenerarContratos() {
           break;
         case 11:
           newForm.NombreCliente = message;
-          setMessages((prev) => [...prev, { text: "¿Tipo de vheiculo?", sender: "bot" }]);
+          setMessages((prev) => [...prev, { text: "¿Tipo de vehiculo?", sender: "bot" }]);
           setStep(12);
           break;
         case 12:
@@ -108,12 +110,12 @@ export default function GenerarContratos() {
           resetChat();
           break;
       }
-    
+
       setForm(newForm);
     }
-    
+
   };
-  
+
 
   // 👉 Función que llama al webhook de Make.com
   const enviarDatos = async (datos) => {
@@ -145,11 +147,21 @@ export default function GenerarContratos() {
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" />
       </Head>
-      <main style={{ height: "100vh" }}>
-         <div>
+      <main className="generar-bg">
+        <div className="logout-container">
           <LogoutButton />
         </div>
-        <ChatTemplate messages={messages} onSend={handleSend} />
+        <div>
+          <h1 className="text-center">Generador de Contratos</h1>
+        </div>
+        <div className="chat-wrapper">
+          <div className="chat-inner">
+            <ChatTemplate messages={messages} onSend={handleSend} />
+            {/* <div className="chat-left">
+              <FilesPanelPDF />
+            </div> */}
+          </div>
+        </div>
       </main>
     </>
   );

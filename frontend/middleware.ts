@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get('token')?.value;
- console.log('[MIDDLEWARE] Ruta solicitada:', req.nextUrl.pathname, '| Token:', token); // 👈
   const isProtectedRoute = req.nextUrl.pathname.startsWith('/generarcontratos');
 
   if (isProtectedRoute && !token) {
