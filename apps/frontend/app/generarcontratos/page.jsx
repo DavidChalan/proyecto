@@ -4,7 +4,7 @@ import ChatTemplate from "../components/ChatTemplate";
 import LogoutButton from "../components/LogoutButton";
 import FilesPanelPDF from "../components/FilesPanelPDF";
 import { useState } from "react";
-import "../generarcontratos/page.css";
+import "./page.css";
 
 export default function GenerarContratos() {
   const [messages, setMessages] = useState([]);
