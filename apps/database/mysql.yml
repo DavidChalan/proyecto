@@ -1,0 +1,62 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    # el contenedor se reinicia siempre que se detiene
+    environment:
+      MYSQL_ROOT_PASSWORD: '686905439'
+      MYSQL_DATABASE: proyecto
+      MYSQL_USER: david
+      MYSQL_PASSWORD: '686905439'
+    ports:
+      - "3307:3306"
+    # los volumenes son almacenados en el host
+    volumes:
+    # se crea un volumen llamado database_mysql_data  , lo de database es por el nombre de la carpeta
+    # y mysql_data es el nombre del volumen , hacemos un docker volume ls para ver los volumenes
+      - ./mysql_data:/var/lib/mysql
+      - ./dbfiles:/docker-entrypoint-initdb.d
+    # adminer es una herramienta para gestionar mysql
+    # se puede acceder a adminer en localhost:9090
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "9090:8080"
+    depends_on:
+      - mysql
+      
+# backend apps serivces
+  backend:
+    build:
+      context: ../backend       # ← Ajusta a la ruta correcta del proyecto
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: always
+    ports:
+      - "3001:3001"                 # ← Ajustado al puerto real de tu app
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: david
+      DB_PASS: '686905439'
+      DB_NAME: proyecto
+      JWT_SECRET: '686905439'
+#frontend apps serivces
+  frontend:
+    build:
+      context: ../frontend       # ← Ajusta a la ruta correcta del proyecto
+      dockerfile: Dockerfile
+    container_name: frontend
+    restart: always
+    ports:
+      - "3000:3000"                 # ← Ajustado al puerto real de tu app
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://144.91.101.221:3001/api/v1
+volumes:
+  mysql_data:
