@@ -1,6 +1,9 @@
 'use client';
 import { useEffect, useState } from "react";
 import "../styles/chat.css";
+import SharedContract from "./SharedContract";
+
+
 export default function ChatTemplate({ messages, onSend }) {
   const [input, setInput] = useState("");
 
@@ -38,16 +41,42 @@ export default function ChatTemplate({ messages, onSend }) {
   const [contracts, setContracts] = useState([]);
 
   useEffect(() => {
-    fetch("https://hook.eu2.make.com/nbcfaoy6weow0a6q8wevo7xi59xixx4x")
+    fetch(`${process.env.NEXT_PUBLIC_MAKE_API_REQUESTS}/contracts`)
       .then(res => res.json())
       .then(data => {
-        setContracts(data);
+        setContracts(Array.isArray(data) ? data : data.contracts || []);
       })
       .catch((err) => console.error("Error al obtener contratos:", err));
   }, []);
   // Filtramos los contratos por tipo
   const contratosCoche = contracts.filter(file => file.name.toLowerCase().includes("coche"));
   const contratosCasa = contracts.filter(file => file.name.toLowerCase().includes("casa"));
+
+
+  // Función para eliminar un contrato
+  const deleteContract = async (id) => {
+    const confirmed = window.confirm(`¿Estás seguro que deseas eliminar el contrato con ID ${id}?`);
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_MAKE_API_REQUESTS}/contracts/${id}`, {
+        method: 'DELETE',
+      });
+
+      const data = await res.json();
+      if (data.deleted) {
+        alert(`Contrato con id ${id} eliminado correctamente`);
+        setContracts(prev => prev.filter(c => c.id !== id));
+      } else {
+        alert(`No se encontró el contrato con id ${id}`);
+      }
+    } catch (err) {
+      console.error("Error eliminando contrato:", err);
+      alert("Ocurrió un error al intentar eliminar el contrato.");
+    }
+  };
+
+
 
   return (
     <div className="chat-container">
@@ -72,9 +101,25 @@ export default function ChatTemplate({ messages, onSend }) {
                     <ul className="contracts-list-coche">
                       {contratosCoche.map((file, i) => (
                         <li key={i}>
-                          <a href={file.webViewLink} target="_blank" rel="noopener noreferrer">
+                          <a
+                            href={file.webViewLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="contract-name"
+                            title={file.name}
+                          >
                             {file.name}
                           </a>
+                          <button
+                            className="boton-eliminar"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              deleteContract(file.id);
+                            }}
+                          >
+                            Eliminar
+                          </button>
+                          <SharedContract file={file} />
                         </li>
                       ))}
                     </ul>
@@ -85,9 +130,25 @@ export default function ChatTemplate({ messages, onSend }) {
                   <ul className="contracts-list-casa">
                     {contratosCasa.map((file, i) => (
                       <li key={i}>
-                        <a href={file.webViewLink} target="_blank" rel="noopener noreferrer">
+                        <a
+                          href={file.webViewLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="contract-name"
+                          title={file.name}
+                        >
                           {file.name}
                         </a>
+                        <button
+                          className="boton-eliminar"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            deleteContract(file.id);
+                          }}
+                        >
+                          Eliminar
+                        </button>
+                        <SharedContract file={file} />
                       </li>
                     ))}
                   </ul>
@@ -105,7 +166,7 @@ export default function ChatTemplate({ messages, onSend }) {
               <div className="d-flex bd-highlight">
                 <div className="img_cont">
                   <img
-                    src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"
+                    src="/fastcontract-logo.png"
                     className="rounded-circle user_img"
                     alt="User"
                   />

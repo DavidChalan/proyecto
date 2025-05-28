@@ -121,7 +121,7 @@ export default function GenerarContratos() {
   const enviarDatos = async (datos) => {
     const query = new URLSearchParams(datos).toString();
     try {
-      const res = await fetch(`https://hook.eu2.make.com/yznvzeit1u9vhcb732oycsakxj4qesk9?${query}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_MAKE_CREATE_CONTRACT}${query}`);
       if (res.ok) {
         setMessages((prev) => [...prev, { text: "✅ Contrato generado correctamente.", sender: "bot" }]);
       } else {

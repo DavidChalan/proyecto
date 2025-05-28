@@ -2,26 +2,35 @@ import { useEffect, useState } from "react";
 
 export default function FilesPanel() {
   const [contracts, setContracts] = useState([]);
+  // const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
-    fetch("https://hook.eu2.make.com/nbcfaoy6weow0a6q8wevo7xi59xixx4x") // Reemplaza con tu URL real
-      .then(res => res.json())
-      .then(data => setContracts(data))
-      .catch(err => console.error("Error al obtener contratos:", err));
+    fetch(`${process.env.NEXT_PUBLIC_MAKE_API_REQUESTS}/contracts`)
+      .then((res) => res.json())
+      .then((data) => setContracts(data))
+      .catch((err) => console.error('Error al obtener contratos:', err));
   }, []);
 
   return (
     <div className="contratos-panel">
       <h4>📄 Contratos generados</h4>
-      <ul>
-        {contracts.map((doc, idx) => (
-          <li key={idx}>
-            <a href={doc.link} target="_blank" rel="noopener noreferrer">
-              {doc.name}
-            </a>
-          </li>
-        ))}
-      </ul>
+
+      {loading ? (
+        <p>Cargando contratos...</p>
+      ) : contracts.length === 0 ? (
+        <p>No hay contratos aún.</p>
+      ) : (
+        <ul>
+          {contracts.map((contract) => (
+            <li key={contract.id}>
+              <a href={contract.webViewLink} target="_blank" rel="noopener noreferrer">
+                {contract.name}
+              </a> – <em>{contract.type}</em>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

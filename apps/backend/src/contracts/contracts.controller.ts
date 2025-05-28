@@ -1,45 +1,43 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, Delete } from '@nestjs/common';
 import { ContractsService } from './contracts.service';
-import { CreateContractDto } from './dto/create-contract.dto';
-import { UpdateContractDto } from './dto/update-contract.dto';
 
 @Controller('contracts')
 export class ContractsController {
-  constructor(private readonly contractsService: ContractsService) {}
+  constructor(private readonly contractsService: ContractsService) { }
 
-  @Post()
-  create(@Body() createContractDto: CreateContractDto) {
-    return this.contractsService.create(createContractDto);
+  /**
+   * Este endpoint lo llama Make.com automáticamente una vez el contrato ha sido generado
+   */
+  @Post('save-from-make')
+  async saveFromMake(@Body() body: { name: string; webViewLink: string; type: string }) {
+    return await this.contractsService.saveFromMake(body);
   }
 
+  /**
+   * Este endpoint lo llama el frontend para obtener la lista de contratos guardados
+   */
   @Get()
-  findAll() {
-    return this.contractsService.findAll();
+  async findAll() {
+    return await this.contractsService.findAll();
   }
 
+  // ✅ Esto es lo que te falta
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.contractsService.findOne(+id);
+    return this.contractsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateContractDto: UpdateContractDto,
-  ) {
-    return this.contractsService.update(+id, updateContractDto);
-  }
-
+  /* Este endpoint elimina un contrato por su ID */
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.contractsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const result = await this.contractsService.deleteContract(id);
+    if (result.deleted) {
+      return {
+        message: `Contrato con el id ${ id } eliminado correctamente`
+      };
+
+    } else {
+      return { message: `Contrato con el id ${ id } no encontrado`};
+    }
   }
 }

@@ -113,15 +113,15 @@ body, html {
 .files-panel-coche {
   padding: 1rem;
   color: white;
-  background-color: #3c4a5a;
+  /* background-color: #3c4a5a; */
   border-radius: 10px;
   max-height: 400px;
   overflow-y: auto;
 }
 .files-panel-casa {
-  padding: 1rem;
+  padding: 2rem;
   color: white;
-  background-color: #3c4a5a;
+  /* background-color: #3c4a5a; */
   border-radius: 10px;
   max-height: 400px;
   overflow-y: auto;
@@ -143,15 +143,31 @@ body, html {
 /*----------------------------------------*/
 
 /* ===== Estilo de los enlaces ===== */
-.contracts-list a {
-  color: #a6f0ff;
-  text-decoration: none;
-  word-break: break-word;
+a {
+  color: #efe1ae !important; 
+  text-decoration: none; /* Elimina el subrayado */
+  transition: color 0.2s;
+  }
+
+  a:hover {
+    color: #f2d113 !important;
+    text-decoration: underline;
 }
 
-.contracts-list a:hover {
-  text-decoration: underline;
+.contract-name {
+  display: inline-block;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  font-weight: 500;
+  font-size: 15px;
+  color: #efe1ae !important;
+  transition: color 0.2s;
+  cursor: pointer;
 }
+
 
 /* ===== Burbujas de mensajes ===== */
 .msg_cotainer,
@@ -262,6 +278,47 @@ body, html {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.2);
 }
+
+/******botones*******/
+
+ .boton-eliminar{
+
+  background: linear-gradient(90deg, #aa9b9b 0%, #805519 100%);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-weight: 100;
+  cursor: pointer;
+  box-shadow: 0 4px 14px 0 rgba(0,0,0,0.15);
+  transition: background 0.3s, transform 0.2s;
+
+  &:hover {
+    background: linear-gradient(90deg, #836f54 0%, #960303 100%);
+    transform: translateY(-2px) scale(1.04);
+  }
+ }
+
+  .boton-compartir{
+
+  background: linear-gradient(90deg, #aa9b9b 0%, #805519 100%);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-weight: 100;
+  cursor: pointer;
+  box-shadow: 0 4px 14px 0 rgba(0,0,0,0.15);
+  transition: background 0.3s, transform 0.2s;
+
+  &:hover {
+    background: linear-gradient(90deg, #836f54 0%, #960303 100%);
+    transform: translateY(-2px) scale(1.04);
+  }
+ }
+
 
 /* ===== Responsive para móviles ===== */
 @media (max-width: 991px) {

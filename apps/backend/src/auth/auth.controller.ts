@@ -41,6 +41,7 @@ export class AuthController {
     return {
       message: 'Login successful',
       email: loginResult.email,
+      token: loginResult.token,
     };
   }
   @Post('logout')

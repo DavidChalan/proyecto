@@ -1,1 +1,4 @@
-export class CreateContractDto {}
+export class CreateContractDto {
+    name: string;
+    url: string;
+}

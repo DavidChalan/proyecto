@@ -1,26 +1,52 @@
 import { Injectable } from '@nestjs/common';
-import { CreateContractDto } from './dto/create-contract.dto';
-import { UpdateContractDto } from './dto/update-contract.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import fetch from 'node-fetch';
+import { Contract } from './entities/contract.entity';
 
 @Injectable()
 export class ContractsService {
-  create(createContractDto: CreateContractDto) {
-    return 'This action adds a new contract';
+  constructor(
+    @InjectRepository(Contract)
+    private contractsRepo: Repository<Contract>,
+  ) { }
+
+  /*Guarda el contrato en la base de datos cuando Make lo genera*/
+  async saveFromMake(payload: {
+    name: string;
+    webViewLink: string;
+    type: string;
+  }): Promise<Contract> {
+    const { name, webViewLink, type } = payload;
+
+    const contract = this.contractsRepo.create({
+      name,
+      type,
+      webViewLink
+    });
+
+    return this.contractsRepo.save(contract);
   }
 
-  findAll() {
-    return `This action returns all contracts`;
+  /*
+    Devuelve todos los contratos guardados en orden descendente por fecha
+   */
+  findAll(): Promise<Contract[]> {
+    return this.contractsRepo.find({
+      order: { createdAt: 'DESC' },
+    });
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} contract`;
+  /*
+    Devuelve un contrato por su ID
+   */
+  async findOne(id: string) {
+    return await this.contractsRepo.findOne({ where: { id: Number(id) } });
   }
-
-  update(id: number, updateContractDto: UpdateContractDto) {
-    return `This action updates a #${id} contract`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} contract`;
+  /*
+    Elimina un contrato por su ID
+   */
+  async deleteContract(id: string): Promise<{ deleted: boolean }> {
+    const result = await this.contractsRepo.delete(id);
+    return { deleted: !!result.affected && result.affected > 0 };
   }
 }
