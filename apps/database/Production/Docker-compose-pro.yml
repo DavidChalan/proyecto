@@ -1,0 +1,88 @@
+#production
+services:
+  mysql-production:
+    image: mysql:latest
+    container_name: mysql-production
+    restart: always
+    # el contenedor se                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      reinicia siempre que se detiene
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+    # recursos de mysql
+    deploy:
+      resources:
+        limits:
+          cpus: '0.20' # utiliza el 20% de un CPU
+          memory: 512M # Megas de memoria RAM
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    ports:
+      - "3307:3306"
+    # los volumenes son almacenados en el host
+    volumes:
+      # se crea un volumen llamado database_mysql_data  , lo de database es por el nombre de la carpeta
+      # y mysql_data es el nombre del volumen , hacemos un docker volume ls para ver los volumenes
+      - ./mysql_data_prod:/var/lib/mysql
+      - ./dbfiles_vol_prod:/docker-entrypoint-initdb.d
+  
+  # backend apps serivces production
+  backend-production:
+    build:
+      context: ../../backend # ← Ajusta a la ruta correcta del proyecto
+      dockerfile: Dockerfile
+    image: backend-production:v1
+    container_name: backend-production
+    restart: always
+    ports:
+      - "31001:31001" # puerto del backend de production
+    depends_on:
+      - mysql-production
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+
+      # Ajustes de limites de recursos
+    deploy:
+      resources:
+        limits:
+          cpus: '0.20' # utiliza el 20% de un CPU
+          memory: 250M # Megas de memoria RAM
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
+#frontend apps serivces production
+  frontend-production:
+    build:
+      context: ../../frontend # ← Ajusta a la ruta correcta del proyecto
+      dockerfile: Dockerfile
+    image: frontend-production:v1
+    container_name: frontend-production
+    restart: always
+    ports:
+      - "3000:3000" # puerto de la app frontend de production
+    depends_on:
+      - backend-production
+    environment:
+      NEXT_PUBLIC_API_URL: ${URL}
+    # Ajustes de limites de recursos  
+    deploy:
+      resources:
+        limits:
+          cpus: '0.20' # utiliza el 20% de un CPU
+          memory: 250M # Megas de memoria RAM
+        reservations:
+          cpus: '0.1'
+          memory: 128M   
+volumes:
+  mysql_data_production:
+    name: mysql_data_production
+  dbfiles_pro:
+    name: dbfiles_vol_pro

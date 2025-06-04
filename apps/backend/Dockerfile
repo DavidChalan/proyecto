@@ -38,6 +38,6 @@ RUN chown -R admin:devops /app
 # Cambiar al usuario no root
 USER admin
 
-EXPOSE 3001
+EXPOSE 31001
 
 CMD ["node", "dist/main"]

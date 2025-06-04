@@ -1,7 +1,8 @@
+# ✅ 8. Frontend Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deployment       
+  name: frontend-production
 spec:
   replicas: 1
   selector:
@@ -14,22 +15,9 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: davidchalan/frontend-app:v1.0
+          image: davidchalan/frontend-fastcontract:v1.2
           ports:
             - containerPort: 3000
           env:
             - name: NEXT_PUBLIC_API_URL
-              value: "http://144.91.101.221:3001/api/v1"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: frontend-service
-spec:
-  selector:
-    app: frontend
-  ports:
-    - protocol: TCP
-      port: 3000
-      targetPort: 3000
-  type: ClusterIP
+              value: http://localhost:31001/api/v1

@@ -12,7 +12,7 @@ app.use(cookieParser());
   app.enableCors({
     origin: [
       'http://localhost:3000',
-      'http://144.91.101.221:3000',
+      'http://144.91.101.221:31000',
       // 'http://192.168.5.6:3000',
     ], // ip fronted
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -34,7 +34,7 @@ app.use(cookieParser());
   );
 
   // 4. Puerto configurable
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 31001;
   await app.listen(port, '0.0.0.0');
   console.log(`🚀 Servidor corriendo en http://localhost:${port}/api/v1`);
 }

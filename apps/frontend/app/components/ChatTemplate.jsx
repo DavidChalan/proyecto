@@ -2,9 +2,11 @@
 import { useEffect, useState } from "react";
 import "../styles/chat.css";
 import SharedContract from "./SharedContract";
+import SearchContract from "./SearchContract"; // Ajusta la ruta si es necesario
 
 
-export default function ChatTemplate({ messages, onSend }) {
+
+export default function ChatTemplate({ messages, onSend, onContractsRefreshed }) {
   const [input, setInput] = useState("");
 
   useEffect(() => {
@@ -40,6 +42,7 @@ export default function ChatTemplate({ messages, onSend }) {
   // Aquí se obtiene la lista de contratos
   const [contracts, setContracts] = useState([]);
 
+
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_MAKE_API_REQUESTS}/contracts`)
       .then(res => res.json())
@@ -48,10 +51,27 @@ export default function ChatTemplate({ messages, onSend }) {
       })
       .catch((err) => console.error("Error al obtener contratos:", err));
   }, []);
-  // Filtramos los contratos por tipo
-  const contratosCoche = contracts.filter(file => file.name.toLowerCase().includes("coche"));
-  const contratosCasa = contracts.filter(file => file.name.toLowerCase().includes("casa"));
 
+    // Función que puede ser reutilizada desde fuera
+  const fetchContracts = () => {
+    fetch(`${process.env.NEXT_PUBLIC_MAKE_API_REQUESTS}/contracts`)
+      .then(res => res.json())
+      .then(data => {
+        setContracts(Array.isArray(data) ? data : data.contracts || []);
+      })
+      .catch((err) => console.error("Error al obtener contratos:", err));
+  };
+
+  useEffect(() => {
+    fetchContracts();
+  }, []);
+
+  // Exponer función al componente padre
+  useEffect(() => {
+    if (onContractsRefreshed) {
+      onContractsRefreshed(fetchContracts); // le das el control al padre
+    }
+  }, [onContractsRefreshed]);
 
   // Función para eliminar un contrato
   const deleteContract = async (id) => {
@@ -76,6 +96,24 @@ export default function ChatTemplate({ messages, onSend }) {
     }
   };
 
+  // Barra para buscar los contratos
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearch = (query) => {
+  setSearchQuery(query.toLowerCase());
+};
+
+const filteredContracts = contracts.filter((file) =>
+  file.name.toLowerCase().includes(searchQuery)
+);
+
+const contratosCoche = filteredContracts.filter((file) =>
+  file.name.toLowerCase().includes("coche")
+);
+
+const contratosCasa = filteredContracts.filter((file) =>
+  file.name.toLowerCase().includes("casa")
+);
+
 
 
   return (
@@ -86,10 +124,7 @@ export default function ChatTemplate({ messages, onSend }) {
           <div className="card contacts_card">
             <div className="card-header">
               <div className="input-group">
-                <input type="text" placeholder="Search..." className="form-control search" />
-                <div className="input-group-prepend">
-                  <span className="input-group-text search_btn"><i className="fas fa-search" /></span>
-                </div>
+                <SearchContract onSearch={handleSearch} />
               </div>
             </div>
             <div className="card-body contacts_body">

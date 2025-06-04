@@ -1,0 +1,90 @@
+  #preproduction
+services:
+  mysql-preproduction:
+    image: mysql:latest
+    container_name: mysql-preproduction
+    restart: always
+    # el contenedor se reinicia siempre que se detiene
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+    # recursos de mysql
+    deploy:
+      resources:
+        limits:
+          cpus: '0.20' # utiliza el 20% de un CPU
+          memory: 512M # Megas de memoria RAM
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    # puerto de mysql
+    ports:
+      - "3309:3306"
+    # los volumenes son almacenados en el host
+    # En Preproduction/Docker-compose-prep.yml
+    # se crea un volumen llamado database_mysql_data  , lo de database es por el nombre de la carpeta
+      # y mysql_data es el nombre del volumen , hacemos un docker volume ls para ver los volumenes
+    volumes:
+      - ./mysql_data_prep:/var/lib/mysql
+      - ./dbfiles_vol_prep:/docker-entrypoint-initdb.d
+ #------------------------------------------------------------------
+    # backend apps serivces preproduction
+  backend-preproduction:
+    build:
+      context: ../../backend # ← Ajusta a la ruta correcta del proyecto
+      dockerfile: Dockerfile
+    image: backend-preproduction:v1
+    container_name: backend-preproduction
+    restart: always
+    ports:
+      - "3002:3001" # puerto del backend de prepoduction
+    depends_on:
+      - mysql-preproduction
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+
+        # Ajustes de limites de recursos
+    deploy:
+      resources:
+        limits:
+          cpus: '0.20' # utiliza el 20% de un CPU
+          memory: 250M # Megas de memoria RAM
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
+  #frontend apps serivces preproduction
+  frontend-preproduction:
+    build:
+      context: ../../frontend # ← Ajusta a la ruta correcta del proyecto
+      dockerfile: Dockerfile
+    image: frontend-preproduction:v1
+    container_name: frontend-preproduction
+    restart: always
+    ports:
+      - "3003:3000" # puerto de la app frontend
+    depends_on:
+      - backend-preproduction
+    environment:
+      NEXT_PUBLIC_API_URL: ${URL}
+        # Ajustes de limites de recursos  
+    deploy:
+      resources:
+        limits:
+          cpus: '0.20' # utiliza el 20% de un CPU
+          memory: 250M # Megas de memoria RAM
+        reservations:
+          cpus: '0.1'
+          memory: 128M  
+volumes:
+  mysql_data_preproduction:
+    name: mysql_data_preproduction
+  dbfiles_prep:
+    name: dbfiles_vol_prep

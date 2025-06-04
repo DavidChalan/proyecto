@@ -1,0 +1,13 @@
+# ✅ 9. Frontend Service (NodePort para acceso desde NGINX Proxy Manager)
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  type: NodePort
+  selector:
+    app: frontend
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 31000

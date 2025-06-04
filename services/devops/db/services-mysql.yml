@@ -1,0 +1,15 @@
+# 3. MySQL Service (NodePort para acceso desde fuera del clúster si es necesario)
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  labels:
+    app: mysql
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      targetPort: 3306
+      name: mysql-port

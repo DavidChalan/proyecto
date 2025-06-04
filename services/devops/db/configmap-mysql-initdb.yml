@@ -1,0 +1,10 @@
+# ConfigMap para configuración no sensible
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+data:
+  DB_NAME: proyecto
+  DB_USER: david
+  DB_PORT: "3306"
+  DB_HOST: mysql-service

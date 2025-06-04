@@ -2,8 +2,7 @@
 import Head from "next/head";
 import ChatTemplate from "../components/ChatTemplate";
 import LogoutButton from "../components/LogoutButton";
-import FilesPanelPDF from "../components/FilesPanelPDF";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./page.css";
 
 export default function GenerarContratos() {
@@ -11,39 +10,52 @@ export default function GenerarContratos() {
   const [step, setStep] = useState(0); // control del paso de preguntas
   const [form, setForm] = useState({}); // datos recogidos
   const [tipoContrato, setTipoContrato] = useState(""); // coche o casa
+  const [refetchContracts, setRefetchContracts] = useState(null);
 
+
+  useEffect(() => {
+    // Mostrar como mensaje predeterminado
+    if (step === 0 && messages.length === 0) {
+      setMessages([{ text: "¿Qué tipo de contrato quieres generar? (casa o coche)", sender: "bot" }]);
+    }
+  }, []);
   // Maneja el envío de mensajes desde el chat
   const handleSend = async (message) => {
     setMessages((prev) => [...prev, { text: message, sender: "user" }]);
-
-    // Si aún no ha empezado el flujo
+    //primeras preguntas despues de la de pordefecto
     if (step === 0) {
+      const newForm = { ...form };
+
       if (message.toLowerCase().includes("casa")) {
         setTipoContrato("casa");
-        setMessages((prev) => [...prev, { text: "clase de contrato", sender: "bot" }]);
-        setStep(1);
-      } else if (message.toLowerCase().includes("coche")) {
-        setTipoContrato("coche");
-        setMessages((prev) => [...prev, { text: "Clase de contrato", sender: "bot" }]);
-        setStep(10);
-      } else {
-        setMessages((prev) => [...prev, { text: "❓ Escribe 'contrato casa' o 'contrato coche'", sender: "bot" }]);
+        newForm.ClaseContrato = message;
+        setForm(newForm);
+        setMessages((prev) => [...prev, { text: "¿Nombre del comprador?", sender: "bot" }]);
+        setStep(2); //pasamos directamente al 2
+        return
       }
+
+      if (message.toLowerCase().includes("coche")) {
+        setTipoContrato("coche");
+        newForm.ClaseContrato = "coche";
+        setForm(newForm);
+        setMessages((prev) => [...prev, { text: "¿Nombre del cliente?", sender: "bot" }]);
+        setStep(11); // pasamos directamente al paso 11
+        return;
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        { text: "Escribe 'casa' o 'coche'", sender: "bot" },
+      ]);
       return;
     }
-
-
 
     // 🏡 FLUJO CASA
     if (tipoContrato === "casa") {
       const newForm = { ...form };
 
       switch (step) {
-        case 1:
-          newForm.ClaseContrato = message;
-          setMessages((prev) => [...prev, { text: "Nombre del comprador", sender: "bot" }]);
-          setStep(2);
-          break;
         case 2:
           newForm.nombreComprador = message;
           setMessages((prev) => [...prev, { text: "¿Nombre del vendedor?", sender: "bot" }]);
@@ -84,11 +96,6 @@ export default function GenerarContratos() {
       const newForm = { ...form };
 
       switch (step) {
-        case 10:
-          newForm.ClaseContrato = "coche"; // 👈 Esto indica a Make el tipo de contrato
-          setMessages((prev) => [...prev, { text: "¿Nombre del cliente?", sender: "bot" }]);
-          setStep(11);
-          break;
         case 11:
           newForm.NombreCliente = message;
           setMessages((prev) => [...prev, { text: "¿Tipo de vehiculo?", sender: "bot" }]);
@@ -124,6 +131,7 @@ export default function GenerarContratos() {
       const res = await fetch(`${process.env.NEXT_PUBLIC_MAKE_CREATE_CONTRACT}${query}`);
       if (res.ok) {
         setMessages((prev) => [...prev, { text: "✅ Contrato generado correctamente.", sender: "bot" }]);
+        if (refetchContracts) refetchContracts();
       } else {
         setMessages((prev) => [...prev, { text: "❌ Error al generar el contrato.", sender: "bot" }]);
       }
@@ -156,10 +164,11 @@ export default function GenerarContratos() {
         </div>
         <div className="chat-wrapper">
           <div className="chat-inner">
-            <ChatTemplate messages={messages} onSend={handleSend} />
-            {/* <div className="chat-left">
-              <FilesPanelPDF />
-            </div> */}
+            <ChatTemplate
+              messages={messages}
+              onSend={handleSend}
+              onContractsRefreshed={setRefetchContracts}
+            />
           </div>
         </div>
       </main>

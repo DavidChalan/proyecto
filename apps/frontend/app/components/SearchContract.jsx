@@ -4,7 +4,11 @@ const SearchContract = ({ onSearch }) => {
     const [query, setQuery] = useState("");
 
     const handleInputChange = (e) => {
-        setQuery(e.target.value);
+        const value = e.target.value;
+        setQuery(value);
+        if (onSearch) {
+            onSearch(value);
+        }
     };
 
     const handleSearch = (e) => {
