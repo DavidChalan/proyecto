@@ -2,8 +2,8 @@
 apps/database/Production/mysql_data_prod/
 
 # Archivos de contraseñas
-services/nginx-proxy-manager/db_root_pwd.txt
-services/nginx-proxy-manager/mysql_pwd.txt
+services/nginx-proxy-manager/.secrets/*
+#services/nginx-proxy-manager/.secrets/mysql_pwd.txt
 
 # Archivos generados de logs
 services/nginx-proxy-manager/*.log
@@ -11,6 +11,8 @@ services/nginx-proxy-manager/*.log
 # Archivos internos del proxy manager (datos y config)
 services/nginx-proxy-manager/data/nginx/*.conf
 services/nginx-proxy-manager/data/mysql/*
+services/nginx-proxy-manager/data/keys.json
+services/nginx-proxy-manager/data/nginx/proxy_host/*
 
 # Archivos binarios de aria y demás de MariaDB/MySQL
 services/nginx-proxy-manager/mysql/aria_log.*
