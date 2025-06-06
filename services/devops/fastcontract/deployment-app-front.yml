@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-production
+  namespace: fastcontract-dev
 spec:
   replicas: 1
   selector:

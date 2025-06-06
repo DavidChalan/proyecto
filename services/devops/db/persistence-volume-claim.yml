@@ -5,6 +5,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim # tipo de archivo
 metadata:
   name: mysql-claim
+  namespace: fastcontract-dev
   labels:
     app: mysql 
 spec:

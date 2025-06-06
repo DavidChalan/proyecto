@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-production
+  namespace: fastcontract-dev
   labels:
     app: backend-Deployment
 spec:

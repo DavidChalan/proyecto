@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: db-config
+  namespace: fastcontract-dev
 data:
   DB_NAME: proyecto
   DB_USER: david
