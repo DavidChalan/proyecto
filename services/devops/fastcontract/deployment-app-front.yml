@@ -1,4 +1,4 @@
-# ✅ 8. Frontend Deployment
+# 8. Frontend Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,4 +21,4 @@ spec:
             - containerPort: 3000
           env:
             - name: NEXT_PUBLIC_API_URL
-              value: http://localhost:31001/api/v1
+              value: http://backend.davidchalan.es/api/v1

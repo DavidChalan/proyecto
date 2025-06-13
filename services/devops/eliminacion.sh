@@ -30,6 +30,13 @@ kubectl delete -f db/secret-desarrollo.yml -n $NAMESPACE --ignore-not-found
 echo "🧹 Eliminando Persistent Volume Claim..."
 kubectl delete -f db/persistence-volume-claim.yml -n $NAMESPACE --ignore-not-found
 
+echo "🧹 Eliminando Ingress de Adminer..."
+kubectl delete -f ingress/adminer-ingress.yml -n $NAMESPACE --ignore-not-found
+echo "🧹 Eliminando Ingress de Backend..." 
+kubectl delete -f ingress/backend-ingress.yml -n $NAMESPACE --ignore-not-found
+echo "🧹 Eliminando Ingress de Frontend..."
+kubectl delete -f ingress/frontend-ingress.yml -n $NAMESPACE --ignore-not-found
+
 echo "🧹 Eliminando Persistent Volume..."
 kubectl delete -f db/persistence-volume.yml --ignore-not-found
 

@@ -39,6 +39,15 @@ echo "🎨 Desplegando Frontend de la app..."
 kubectl apply -f fastcontract/deployment-app-front.yml -n $NAMESPACE
 kubectl apply -f fastcontract/service-front.yml -n $NAMESPACE
 
+echo " Desplegando adminer-ingress de la app..."
+kubectl apply -f ingress/adminer-ingress.yml -n $NAMESPACE
+
+echo " Desplegando backend-Ingress de la app..."
+kubectl apply -f ingress/backend-ingress.yml -n $NAMESPACE
+
+echo " Desplegando frontend-Ingress de la app..."
+kubectl apply -f ingress/frontend-ingress.yml -n $NAMESPACE
+
 echo "⏳ Esperando a que todos los pods estén en estado 'Running'..."
 sleep 5
 
