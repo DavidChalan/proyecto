@@ -1,0 +1,39 @@
+/* Fondo y layout general */
+.generar-bg {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(120deg, #a6f0ff, #7f87ff);
+}
+
+/* Botón */
+.logout-container {
+  width: 100%;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Chat contenedor general */
+.chat-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Ancho máximo del contenido del chat */
+.chat-inner {
+  width: 100%;
+  max-width: 1000px;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+/* Comportamiento en pantallas chicas */
+@media (max-width: 992px) {
+  .chat-inner {
+    flex-direction: column;
+    align-items: center;
+  }
+}

@@ -1,0 +1,17 @@
+# 1. Persistent Volume Claim lo utilizamos para solicitar un volumen 
+# apartir del persisten-volume.  (cogemos partes del disco duro, pero
+# no lo usamos directamente, sino que lo solicitamos al persisten-volume)
+apiVersion: v1
+kind: PersistentVolumeClaim # tipo de archivo
+metadata:
+  name: mysql-claim
+  namespace: fastcontract-dev
+  labels:
+    app: mysql 
+spec:
+  storageClassName: manual # Clase de almacenamiento local
+  accessModes: 
+    - ReadWriteOnce #Un solo pod puede montar el volumen con lectura y escritura.
+  resources:
+    requests:
+      storage: 2Gi # Capacidad del volumen que solicitamos

@@ -1,0 +1,18 @@
+# 1. Persistent Volume para MySQL , donde cogemos una parte de 
+# nuestro disco duro para almacenar los datos de la BBDD
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-volume
+  namespace: fastcontract-dev
+  labels:
+    app: mysql
+    type: local # vamnos a usar almacenamiento local 
+spec:
+  storageClassName: manual # Clase de almacenamiento local
+  capacity: 
+    storage: 5Gi # Capacidad del volumen
+  accessModes: 
+    - ReadWriteOnce #Un solo pod puede montar el volumen con lectura y escritura.
+  hostPath: # Ruta del host donde se almacenarán los datos
+    path: /mnt/data/mysql # Ruta en el nodo del clúster donde se almacenarán los datos de MySQL

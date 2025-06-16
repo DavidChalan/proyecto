@@ -1,0 +1,35 @@
+# MYSQL data
+apps/database/Production/mysql_data_prod/
+
+# Archivos de contraseñas
+services/nginx-proxy-manager/.secrets/*
+#services/nginx-proxy-manager/.secrets/mysql_pwd.txt
+
+# Archivos generados de logs
+services/nginx-proxy-manager/*.log
+
+# Archivos internos del proxy manager (datos y config)
+services/nginx-proxy-manager/data/nginx/*.conf
+services/nginx-proxy-manager/data/mysql/*
+services/nginx-proxy-manager/data/keys.json
+services/nginx-proxy-manager/data/nginx/proxy_host/*
+
+# Archivos binarios de aria y demás de MariaDB/MySQL
+services/nginx-proxy-manager/mysql/aria_log.*
+services/nginx-proxy-manager/mysql/*.info
+services/nginx-proxy-manager/mysql/mysql_upgrade_info
+
+# Node.js y desarrollo
+node_modules/
+.env
+.env.*
+*.log
+
+# Editor
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+# Ignorar todos los archivos internos de MariaDB en Nginx Proxy Manager
+services/nginx-proxy-manager/mysql/

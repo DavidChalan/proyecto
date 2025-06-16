@@ -1,0 +1,11 @@
+    # adminer es una herramienta para gestionar mysql
+    # se puede acceder a adminer en localhost:9090
+  services:
+    adminer:
+      image: adminer
+      container_name: adminer
+      ports:
+        - "9090:8080"
+      depends_on:
+        - mysql-production
+        # - mysql-preproduction

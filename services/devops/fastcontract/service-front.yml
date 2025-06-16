@@ -1,0 +1,13 @@
+# ✅ 9. Frontend Service (NodePort para acceso desde NGINX Proxy Manager)
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: fastcontract-dev
+spec:
+  selector:
+    app: frontend
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: ClusterIP
