@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: davidchalan/frontend-fastcontract:v1.2
+          image: davidchalan/frontend-fastcontract:v1.3
           ports:
             - containerPort: 3000
           env:

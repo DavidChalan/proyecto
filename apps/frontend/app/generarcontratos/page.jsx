@@ -124,21 +124,27 @@ export default function GenerarContratos() {
   };
 
 
-  // 👉 Función que llama al webhook de Make.com
-  const enviarDatos = async (datos) => {
-    const query = new URLSearchParams(datos).toString();
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_MAKE_CREATE_CONTRACT}${query}`);
-      if (res.ok) {
-        setMessages((prev) => [...prev, { text: "✅ Contrato generado correctamente.", sender: "bot" }]);
-        if (refetchContracts) refetchContracts();
-      } else {
-        setMessages((prev) => [...prev, { text: "❌ Error al generar el contrato.", sender: "bot" }]);
-      }
-    } catch (error) {
-      setMessages((prev) => [...prev, { text: "⚠️ Error de red.", sender: "bot" }]);
+ const enviarDatos = async (datos) => {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contracts/send-to-make`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(datos),
+    });
+
+    if (res.ok) {
+      setMessages((prev) => [...prev, { text: "✅ Contrato generado correctamente.", sender: "bot" }]);
+      if (refetchContracts) refetchContracts();
+    } else {
+      setMessages((prev) => [...prev, { text: "❌ Error al generar el contrato.", sender: "bot" }]);
     }
-  };
+  } catch (error) {
+    setMessages((prev) => [...prev, { text: "⚠️ Error de red.", sender: "bot" }]);
+  }
+};
+
 
   // 🔁 Reinicia el flujo tras completar
   const resetChat = () => {

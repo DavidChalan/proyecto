@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: davidchalan/backend-fastcontract:v1.2
+          image: davidchalan/backend-fastcontract:v1.3
           ports:
             - containerPort: 31001
           env:

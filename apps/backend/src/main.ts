@@ -12,7 +12,10 @@ app.use(cookieParser());
   app.enableCors({
     origin: [
       'http://localhost:3000',
+      'http://144.91.101.221:3000',
       'http://144.91.101.221:31000',
+      'http://fastcontract.davidchalan.es',
+      'https://fastcontract.davidchalan.es'
       // 'http://192.168.5.6:3000',
     ], // ip fronted
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',

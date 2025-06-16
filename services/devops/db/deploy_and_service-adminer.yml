@@ -26,10 +26,9 @@ kind: Service
 metadata:
   name: adminer-service
 spec:
-  type: NodePort  # Accesible desde fuera del clúster
   selector:
     app: adminer
   ports:
-    - port: 8080
+    - port: 80
       targetPort: 8080
-      nodePort: 30090  # http://<IP_DE_TU_VPS>:30090
+  type: ClusterIP
